@@ -68,4 +68,36 @@ namespace WindowsFormsApp1
             particle.SpeedY -= gY * Power / r2;
         }
     }
+
+    public class ColorPoint : IImpactPoint
+    {
+        public int Radius = 50;
+        public Color TargetColor = Color.Red;
+
+        public override void ImpactParticle(Particle particle)
+        {
+            float gX = X - particle.X;
+            float gY = Y - particle.Y;
+            double distance = Math.Sqrt(gX * gX + gY * gY);
+
+            if (distance < Radius)
+            {
+                if (particle is ParticleColorful colorfulParticle)
+                {
+                    colorfulParticle.FromColor = TargetColor;
+                }
+            }
+        }
+
+        public override void Render(Graphics g)
+        {
+            g.DrawEllipse(
+                new Pen(TargetColor, 2), 
+                X - Radius, 
+                Y - Radius, 
+                Radius * 2, 
+                Radius * 2
+                );
+        }
+    }
 }
