@@ -23,11 +23,10 @@ namespace WindowsFormsApp1
         {
             InitializeComponent();
             picDisplay.Image = new Bitmap(picDisplay.Width, picDisplay.Height);
-
             this.emitter = new Emitter.TopEmitter
             {
                 Width = picDisplay.Width,
-                ParticlesPerTick = 115,
+                ParticlesPerTick = 15,
             };
 
             emitters.Add(this.emitter);
@@ -75,6 +74,35 @@ namespace WindowsFormsApp1
                 };
                 emitter.impactPoints.Add(colorPoint);
             }
+            else if (e.Button == MouseButtons.Right)
+            {
+                IImpactPoint pointToRemove = null;
+                foreach (var point in emitter.impactPoints)
+                {
+                    if (point is ColorPoint colorPoint)
+                    {
+                        double distance = Math.Sqrt(
+                            Math.Pow(e.X - colorPoint.X, 2) +
+                            Math.Pow(e.Y - colorPoint.Y, 2)
+                        );
+                        if (distance < colorPoint.Radius)
+                        {
+                            pointToRemove = point;
+                            break;
+                        }
+                    }
+                }
+                if (pointToRemove != null)
+                {
+                    emitter.impactPoints.Remove(pointToRemove);
+                }
+            }
+        }
+
+        private void tbParticlesPerTick_Scroll(object sender, EventArgs e)
+        {
+            emitter.ParticlesPerTick = tbParticlesPerTick.Value;
+            lblParticlesValue.Text = tbParticlesPerTick.Value.ToString();
         }
     }
 }
