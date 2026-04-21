@@ -73,6 +73,9 @@ namespace WindowsFormsApp1
     {
         public int Radius = 50;
         public Color TargetColor = Color.Red;
+        public int ParticlesPassed = 0;
+
+        private HashSet<Particle> particlesInside = new HashSet<Particle>();
 
         public override void ImpactParticle(Particle particle)
         {
@@ -82,9 +85,22 @@ namespace WindowsFormsApp1
 
             if (distance < Radius)
             {
+                if (!particlesInside.Contains(particle))
+                {
+                    ParticlesPassed++;
+                    particlesInside.Add(particle);
+                }
+
                 if (particle is ParticleColorful colorfulParticle)
                 {
                     colorfulParticle.FromColor = TargetColor;
+                }
+            }
+            else
+            {
+                if (particlesInside.Contains(particle))
+                {
+                    particlesInside.Remove(particle);
                 }
             }
         }
@@ -92,12 +108,37 @@ namespace WindowsFormsApp1
         public override void Render(Graphics g)
         {
             g.DrawEllipse(
-                new Pen(TargetColor, 2), 
-                X - Radius, 
-                Y - Radius, 
-                Radius * 2, 
+                new Pen(TargetColor, 2),
+                X - Radius,
+                Y - Radius,
+                Radius * 2,
                 Radius * 2
-                );
+            );
+
+            var stringFormat = new StringFormat();
+            stringFormat.Alignment = StringAlignment.Center;
+            stringFormat.LineAlignment = StringAlignment.Center;
+
+            var text = $"Частиц: {ParticlesPassed}";
+            var font = new Font("Verdana", 10);
+            var size = g.MeasureString(text, font);
+
+            g.FillRectangle(
+                new SolidBrush(Color.FromArgb(200, Color.Black)),
+                X - size.Width / 2 - 3,
+                Y - size.Height / 2 - 3,
+                size.Width + 6,
+                size.Height + 6
+            );
+
+            g.DrawString(
+                text,
+                font,
+                new SolidBrush(Color.White),
+                X,
+                Y,
+                stringFormat
+            );
         }
     }
 }
