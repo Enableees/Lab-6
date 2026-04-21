@@ -41,6 +41,8 @@ namespace WindowsFormsApp1
         public Color FromColor;
         public Color ToColor;
 
+        public bool Highlighted = false;
+
         public static Color MixColor(Color color1, Color color2, float k)
         {
             return Color.FromArgb(
@@ -56,6 +58,10 @@ namespace WindowsFormsApp1
             float k = Math.Min(1f, Life / 100);
 
             var color = MixColor(ToColor, FromColor, k);
+            if (Highlighted)
+            {
+                color = Color.Cyan;
+            }
             var b = new SolidBrush(color);
 
             g.FillEllipse(b, X - Radius, Y - Radius, Radius * 2, Radius * 2);

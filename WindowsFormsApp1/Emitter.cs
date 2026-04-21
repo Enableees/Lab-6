@@ -9,7 +9,7 @@ namespace WindowsFormsApp1
 {
     public class Emitter
     {
-        List<Particle> particles = new List<Particle>();
+        public List<Particle> particles = new List<Particle>();
         public List<IImpactPoint> impactPoints = new List<IImpactPoint>();
         public float GravitationX = 0;
         public float GravitationY = 1;

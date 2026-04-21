@@ -141,4 +141,62 @@ namespace WindowsFormsApp1
             );
         }
     }
+    public class RadarPoint : IImpactPoint
+    {
+        public int Radius = 50;
+        public int ParticlesCount = 0;
+        public bool Enabled = true;
+
+        public override void ImpactParticle(Particle particle)
+        {
+            if (!Enabled) return;
+
+            float gX = X - particle.X;
+            float gY = Y - particle.Y;
+            double distance = Math.Sqrt(gX * gX + gY * gY);
+
+            if (distance < Radius)
+            {
+                ParticlesCount++;
+            }
+        }
+
+        public override void Render(Graphics g)
+        {
+            if (!Enabled) return;
+
+            g.DrawEllipse(
+                new Pen(Color.Cyan, 2),
+                X - Radius,
+                Y - Radius,
+                Radius * 2,
+                Radius * 2
+            );
+
+            var stringFormat = new StringFormat();
+            stringFormat.Alignment = StringAlignment.Center;
+            stringFormat.LineAlignment = StringAlignment.Center;
+
+            var text = $"В зоне: {ParticlesCount}";
+            var font = new Font("Verdana", 10);
+            var size = g.MeasureString(text, font);
+
+            g.FillRectangle(
+                new SolidBrush(Color.FromArgb(200, Color.Black)),
+                X - size.Width / 2 - 3,
+                Y - size.Height / 2 - 3,
+                size.Width + 6,
+                size.Height + 6
+            );
+
+            g.DrawString(
+                text,
+                font,
+                new SolidBrush(Color.Cyan),
+                X,
+                Y,
+                stringFormat
+            );
+        }
+    }
 }
