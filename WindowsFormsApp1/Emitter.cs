@@ -110,7 +110,14 @@ namespace WindowsFormsApp1
 
             foreach (var point in impactPoints)
             {
-                point.Render(g);
+                if (point is RadarPoint radar)
+                {
+                    radar.Render(g, particles);
+                }
+                else
+                {
+                    point.Render(g);
+                }
             }
         }
 

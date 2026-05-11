@@ -161,9 +161,29 @@ namespace WindowsFormsApp1
             }
         }
 
-        public override void Render(Graphics g)
+        public void Render(Graphics g, List<Particle> particles)
         {
             if (!Enabled) return;
+
+            foreach (var particle in particles)
+            {
+                if (particle.Life <= 0) continue;
+
+                float gX = X - particle.X;
+                float gY = Y - particle.Y;
+                double distance = Math.Sqrt(gX * gX + gY * gY);
+
+                if (distance < Radius)
+                {
+                    g.DrawEllipse(
+                        new Pen(Color.Cyan, 2),
+                        particle.X - particle.Radius - 2,
+                        particle.Y - particle.Radius - 2,
+                        particle.Radius * 2 + 4,
+                        particle.Radius * 2 + 4
+                    );
+                }
+            }
 
             g.DrawEllipse(
                 new Pen(Color.Cyan, 2),

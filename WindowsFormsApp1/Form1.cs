@@ -44,18 +44,6 @@ namespace WindowsFormsApp1
             radarPoint.ParticlesCount = 0;
             radarPoint.Enabled = checkBox1.Checked;
             emitter.UpdateState();
-
-            foreach (var particle in emitter.particles)
-            {
-                if (particle is ParticleColorful colorfulParticle)
-                {
-                    float dx = radarPoint.X - colorfulParticle.X;
-                    float dy = radarPoint.Y - colorfulParticle.Y;
-                    double distance = Math.Sqrt(dx * dx + dy * dy);
-
-                    colorfulParticle.Highlighted = (radarPoint.Enabled && distance < radarPoint.Radius);
-                }
-            }
             using (var g = Graphics.FromImage(picDisplay.Image))
             {
                 g.Clear(Color.Black);

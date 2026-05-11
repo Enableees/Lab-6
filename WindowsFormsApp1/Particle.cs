@@ -33,15 +33,18 @@ namespace WindowsFormsApp1
         }
         public virtual void Draw(Graphics g)
         {
-            /* ... */
+            float k = Math.Min(1f, Life / 100);
+            int alpha = (int)(k * 255);
+            var color = Color.FromArgb(alpha, Color.Black);
+            var b = new SolidBrush(color);
+            g.FillEllipse(b, X - Radius, Y - Radius, Radius * 2, Radius * 2);
+            b.Dispose();
         }
     }
     public class ParticleColorful : Particle
     {
         public Color FromColor;
         public Color ToColor;
-
-        public bool Highlighted = false;
 
         public static Color MixColor(Color color1, Color color2, float k)
         {
@@ -56,16 +59,9 @@ namespace WindowsFormsApp1
         public override void Draw(Graphics g)
         {
             float k = Math.Min(1f, Life / 100);
-
             var color = MixColor(ToColor, FromColor, k);
-            if (Highlighted)
-            {
-                color = Color.Cyan;
-            }
             var b = new SolidBrush(color);
-
             g.FillEllipse(b, X - Radius, Y - Radius, Radius * 2, Radius * 2);
-
             b.Dispose();
         }
     }
